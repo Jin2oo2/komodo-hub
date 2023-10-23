@@ -1,0 +1,26 @@
+<html>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+<head>
+ <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+
+  <div class="topnav">
+    <a href="/">HOME</a> 
+    <div class="right-links">
+      <a href="/register">REGISTER</a>
+      <a href="/login">LOGIN</a>
+    </div>
+  </div>
+  
+
+{% block content %}
+{% endblock %}
+
+<footer>
+  <p>Any Suggestions? Provide us with feedback
+  <a href="/feedback">Here</a></p>
+</footer> 
+
+</body>
+</html>
