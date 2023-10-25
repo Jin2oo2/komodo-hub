@@ -1,10 +1,9 @@
-from flask import Flask, request, render_template, url_for, redirect
+from flask import Flask, request, render_template, url_for, redirect, abort
 import sqlite3 as sql
 from models import create_feedback_table
 
 
 db_path = 'C:\\Users\\owais\\Desktop\\Yggdrasill\\KS\\komodo-hub\\ABC.db'
-
 create_feedback_table()
 
 app = Flask(__name__)
@@ -24,6 +23,8 @@ def register():
 def login():
     if request.method == 'GET':
         return render_template('login.html')
+     else:
+        return do_the_login(request.form['username'], request.form['password'])
 
 
 @app.route('/feedback' , methods = ['GET','POST'], endpoint='feedback')
@@ -45,3 +46,9 @@ def feedback():
         
         return redirect(url_for('feedback'))
     return render_template('feedback.html')  
+    
+def do_the_login(username, password):
+    if username == 'John' and password == '123':
+        return '<h1>Success</h1>'
+    else:
+        abort(403)
