@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, url_for
+from flask import Flask, request, render_template, url_for, abort
 
 app = Flask(__name__)
 
@@ -17,3 +17,11 @@ def register():
 def login():
     if request.method == 'GET':
         return render_template('login.html')
+    else:
+        return do_the_login(request.form['username'], request.form['password'])
+    
+def do_the_login(username, password):
+    if username == 'John' and password == '123':
+        return '<h1>Success</h1>'
+    else:
+        abort(403)
