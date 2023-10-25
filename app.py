@@ -23,7 +23,7 @@ def register():
 def login():
     if request.method == 'GET':
         return render_template('login.html')
-     else:
+    else:
         return do_the_login(request.form['username'], request.form['password'])
 
 
