@@ -1,4 +1,22 @@
-<!DOCTYPE html>
+{% extends 'layout.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<h1>Log in</h1>
+    <form action="" method="post">
+        <label for="username">Enter your username: </label><br>
+        <input type="text" name="username" id="username" required /><br>
+
+        <label for="email">Enter your password: </label><br>
+        <input type="password" name="password" id="password" required /><br>
+          
+        <input type="submit" value="Log in!" />
+        
+      </form>
+{% endblock %}
+
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -18,4 +36,4 @@
         </div>
       </form>
 </body>
-</html>
+</html> -->
