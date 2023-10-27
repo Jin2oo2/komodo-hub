@@ -25,6 +25,12 @@ def login():
         return render_template('login.html')
     else:
         return do_the_login(request.form['username'], request.form['password'])
+    
+def do_the_login(username, password):
+    if username == 'John' and password == '123':
+        return '<h1>Success</h1>'
+    else:
+        abort(403)
 
 
 @app.route('/feedback' , methods = ['GET','POST'], endpoint='feedback')
@@ -46,9 +52,3 @@ def feedback():
         
         return redirect(url_for('feedback'))
     return render_template('feedback.html')  
-    
-def do_the_login(username, password):
-    if username == 'John' and password == '123':
-        return '<h1>Success</h1>'
-    else:
-        abort(403)
