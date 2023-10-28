@@ -3,7 +3,9 @@ import sqlite3 as sql
 from models import create_feedback_table
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, LoginManager
+
 import os
+from werkzeug.security import generate_password_hash, check_password_hash
 
 db_path = 'C:\\Users\\owapip install big-ois\\Desktop\\Yggdrasill\\KS\\komodo-hub\\ABC.db'
 create_feedback_table()
@@ -33,6 +35,17 @@ def hello():
 def register():
     if request.method == 'GET':
         return render_template('register.html')
+    else:
+        username = request.form['username']
+        password = request.form['password']
+        userType = request.form['usertype']
+
+        user = User(username=username, password=generate_password_hash(password, method='sha256'), userType=userType)
+
+        db.session.add(user)
+        db.session.commit()
+
+        return redirect(url_for('login'))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
