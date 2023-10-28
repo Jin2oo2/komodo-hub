@@ -2,7 +2,7 @@ from flask import Flask, request, render_template, url_for, redirect, abort
 import sqlite3 as sql
 from models import create_feedback_table
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import UserMixin, LoginManager
+from flask_login import UserMixin, LoginManager, login_user
 
 import os
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -23,7 +23,7 @@ login_manager.init_app(app)
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User(user_id)
+    return User(id=user_id)
 
 @app.route('/')
 def hello():
@@ -40,7 +40,7 @@ def register():
         password = request.form['password']
         userType = request.form['usertype']
 
-        user = User(username=username, password=generate_password_hash(password, method='sha256'), userType=userType)
+        user = User(username=username, password=generate_password_hash(password, method='scrypt:32768:8:1'), userType=userType)
 
         db.session.add(user)
         db.session.commit()
@@ -52,15 +52,23 @@ def login():
     if request.method == 'GET':
         return render_template('login.html')
     else:
-        return do_the_login(request.form['username'], request.form['password'])
+        username = request.form['username']
+        password = request.form['password']
+        print('username: ' + str(username) + ', password: ' + str(password))
+
+        user = User.query.filter_by(username=username).first()
+        print(user)
+
+        if not user:
+            return '<h1>Wrong username</h1>'
+        
+        elif check_password_hash(user.password, password):
+            login_user(user)
+            return '<h1>Logged in</h1>'
+        
+        else:
+            return '<h1>Wrong password</h1>'
     
-def do_the_login(username, password):
-    if username == 'John' and password == '123':
-        return '<h1>Success</h1>'
-    else:
-        abort(403)
-
-
 @app.route('/feedback' , methods = ['GET','POST'], endpoint='feedback')
 def feedback():
     if request.method == 'GET':
