@@ -7,7 +7,7 @@ from flask_login import UserMixin, LoginManager, login_user
 import os
 from werkzeug.security import generate_password_hash, check_password_hash
 
-db_path = 'C:\\Users\\owapip install big-ois\\Desktop\\Yggdrasill\\KS\\komodo-hub\\ABC.db'
+db_path = 'DBTest1.db'
 create_feedback_table()
 
 db = SQLAlchemy()
@@ -78,7 +78,7 @@ def feedback():
         suggestion = request.form['suggestion']
         
         
-        conn = sql.connect('ABC.db')
+        conn = sql.connect('DBTest1.db')
         cursor = conn.cursor()
 
         cursor.execute("INSERT INTO feedback (submission_date, suggestion) VALUES (CURRENT_TIMESTAMP, ?)", (suggestion,))

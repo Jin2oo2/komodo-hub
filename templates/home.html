@@ -2,7 +2,53 @@
 
 {% block title %}Home{% endblock %}
 {% block content %}
-    <h1>Welcome to Komodo Hub</h1>
-    <a href={{registerURL}}>Register</a>
-    <a href={{loginURL}}>Log in</a>
+    <div class="about-us-box">
+        <h1 class="welcome-title">Welcome to Komodo Hub</h1>
+        <!-- Add the "About Us" section here -->
+        <div class="about-us-section">
+            <p>
+                Welcome to Komodo Hub, your gateway to the world of conservation and wildlife protection in Indonesia. We are the Komodo Foundation, a passionate team of conservationists, educators, and tech enthusiasts dedicated to making a difference for our environment.
+            </p>
+            <p>
+                At Komodo Hub, we believe in the power of technology to bring people, schools, and communities together in the mission to protect and preserve Indonesia's endangered species. Our journey began with a vision to create a digital platform that empowers individuals, schools, and communities to actively participate in conservation programs, share their knowledge, and make a positive impact on our precious wildlife.
+            </p>
+            <p>
+                With the support of the Yayasan Komodo (Komodo Foundation) and the unwavering commitment of our team, we've embarked on a groundbreaking initiative to build a comprehensive platform that offers a wealth of learning materials, interactive programs, and a safe space for students, teachers, and conservation enthusiasts to connect, learn, and take action.
+            </p>
+            <p>
+                Join us in this exciting endeavor as we work together to protect the biodiversity of Indonesia and promote environmental education. Every contribution, no matter how big or small, matters.
+            </p>
+            <p>
+                Together, we can make a lasting impact and ensure a brighter future for our endangered species.
+            </p>
+            <p>
+                Let's embark on this incredible journey of discovery, learning, and conservation. Welcome to Komodo Hub!
+            </p>
+        </div>
+    </div>
+    <!-- Add CSS to style the "about-us-box" and "about-us-section" as desired -->
+    <style>
+    .about-us-box {
+        background-color: #f2cea0; /* Subtle brown color */
+        padding: 20px;
+        text-align: center;
+        border: none;
+        border-radius: 0;
+        max-width: 100%;
+        margin: 0;
+        margin-left: 0; /* Remove left margin */
+        margin-right: 0;
+        overflow: hidden; /* Add overflow property to prevent stretching */
+    }
+
+        .welcome-title {
+            font-family: serif;
+            font-size: 36px;
+            color: rgb(3, 111, 44);
+        }
+
+        .about-us-section {
+            margin-top: 20px;
+        }
+    </style>
 {% endblock %}
