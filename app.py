@@ -3,6 +3,11 @@ import sqlite3 as sql
 from models import create_feedback_table
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, LoginManager, login_user
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField
+from wtforms.validators import DataRequired
+import random
+import string
 
 import os
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -20,6 +25,11 @@ db.init_app(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
+
+# Password recovery form
+class PasswordRecoveryForm(FlaskForm):
+    email = StringField('Email', validators=[DataRequired()])
+    submit = SubmitField('Recover Password')
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -88,6 +98,26 @@ def feedback():
         
         return redirect(url_for('feedback'))
     return render_template('feedback.html')  
+
+ #Route for requesting password reset
+@app.route('/password_reset', methods=['GET', 'POST'])
+def password_reset():
+    form = PasswordRecoveryForm()
+    if form.validate_on_submit():
+        email = form.email.data
+        if email in users:
+            token = generate_token()
+            # Store the token for the user (e.g., in a database)
+            # For now, we'll just print it
+            print(f"Password reset token for {email}: {token}")
+            send_password_reset_email(email, token)
+            flash('Password reset email sent. Check your inbox.')
+        else:
+            flash('Email not found.')
+
+    return render_template('password_reset.html', form=form)
+
+
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
