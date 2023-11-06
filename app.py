@@ -1,8 +1,8 @@
-from flask import Flask, request, render_template, url_for, redirect, abort
+from flask import Flask, request, render_template, url_for, redirect, abort, flash
 import sqlite3 as sql
 from models import create_feedback_table
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import UserMixin, LoginManager, login_user
+from flask_login import UserMixin, LoginManager, login_user, login_required, current_user
 
 import os
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -88,6 +88,25 @@ def feedback():
         
         return redirect(url_for('feedback'))
     return render_template('feedback.html')  
+
+@app.route('/change_password', methods=['GET', 'POST'])
+@login_required
+def change_password():
+    if request.method == 'POST':
+        current_password = request.form['current_password']
+        new_password = request.form['new_password']
+
+        user = User.query.get(current_user.id)
+    
+        if user and user.password == current_password:
+            user.password = new_password
+            db.session.commit()
+            flash('Password changed successfully', 'success')
+            return redirect(url_for('profile'))
+    else:
+            flash('Current password is incorrect', 'error')
+
+    return render_template('password_reset.html')
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
