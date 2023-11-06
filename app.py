@@ -98,15 +98,19 @@ def change_password():
 
         user = User.query.get(current_user.id)
     
-        if user and user.password == current_password:
-            user.password = new_password
+        if user and check_password_hash(user.password, current_password):
+            # Hash and update the new password.
+            hashed_new_password = generate_password_hash(new_password, method='scrypt:32768:8:1')
+            user.password = hashed_new_password
+
+            # Commit changes to the database.
             db.session.commit()
             flash('Password changed successfully', 'success')
-            return redirect(url_for('profile'))
-    else:
+            return redirect(url_for('feedback'))
+        else:
             flash('Current password is incorrect', 'error')
 
-    return render_template('password_reset.html')
+    return render_template('password_reset.html')            
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
