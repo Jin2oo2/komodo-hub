@@ -1,10 +1,60 @@
 {% extends "layout.html" %}
 
-
 {% block content %}
+<div class="feedback-form">
+    <form action="" method="POST">
+        <h2>Provide Your Feedback</h2>
+        <label for="suggestion">Your Suggestion:</label>
+        <input type="text" id="suggestion" name="suggestion" placeholder="Enter your suggestion here" required>
+        <button type="submit">Submit</button>
+    </form>
+</div>
 
-<form action='' method = "POST">
-    <p>Feedback <input type = "text" name = "suggestion" /></p>
-</form>
+<style>
+    body {
+        background-color: #f2cea0;
+    }
+    
+    .feedback-form {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f4f4f4;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        text-align: center;
+    }
 
+    h2 {
+        color: rgb(3, 111, 44);
+        font-family: serif;
+        font-size: 24px;
+    }
+
+    label {
+        display: block;
+        margin-top: 10px;
+    }
+
+    input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        margin: 5px 0;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+    }
+
+    button {
+        background-color: #007BFF;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+</style>
 {% endblock %}

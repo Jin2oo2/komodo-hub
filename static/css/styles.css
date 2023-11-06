@@ -5,7 +5,7 @@ body{
     flex-direction: column;
     margin: 0;
     padding: 0;
-    background-color: #e2f0f9;
+    background-color: #ffffff;
 }
 
 
@@ -15,14 +15,14 @@ footer {
     left: 0;
     right: 0;
     width: 100%;
-    background-color: #333; 
+    background-color: #000000; 
     color: white; 
     text-align: center;
 }
 
 
 .topnav {
-    background-color: #333;
+    background-color: #000000;
     overflow: hidden;
     width: 100%;
     margin: 0; 
@@ -62,3 +62,6 @@ footer {
     color: white;
     text-align: right;
   }
+
+
+
