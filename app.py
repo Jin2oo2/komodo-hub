@@ -1,4 +1,5 @@
 from flask import Flask, request, render_template, url_for, redirect, abort, flash
+from flask_bootstrap import Bootstrap
 import sqlite3 as sql
 from models import create_feedback_table
 from flask_sqlalchemy import SQLAlchemy
@@ -15,6 +16,8 @@ create_feedback_table()
 db = SQLAlchemy()
 
 app = Flask(__name__)
+
+bootstarp = Bootstrap(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///komodoDB.db'
 app.config['UPLOAD_FOLDER'] = 'uploads'

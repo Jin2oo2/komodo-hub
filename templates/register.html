@@ -1,23 +1,23 @@
-{% extends 'layout.html' %}
+{% extends 'base.html' %}
 
 {% block title %}Register{% endblock %}
 
 {% block content %}
-<h1>Register</h1>
-<form method="post">
-  <label for="username">Enter your username: </label><br>
-  <input type="text" name="username" id="username" required /><br>
-
-  <label for="password">Enter your password: </label><br>
-  <input type="password" name="password" id="password" required /><br>
-
-  <legend>Please select your user type:</legend>
-  <input type="radio" id="student" name="usertype" value="student" required>
-  <label for="student">Student</label>
-
-  <input type="radio" id="teacher" name="usertype" value="teacher" >
-  <label for="teacher">Teacher</label><br>
-      
-  <input type="submit" value="Register!" />
-</form>
+  <h1>Register</h1>
+  <form method="post">
+    <label for="username">Enter your username: </label><br>
+    <input type="text" name="username" id="username" required /><br>
+  
+    <label for="password">Enter your password: </label><br>
+    <input type="password" name="password" id="password" required /><br>
+  
+    <legend>Please select your user type:</legend>
+    <input type="radio" id="student" name="usertype" value="student" required>
+    <label for="student">Student</label>
+  
+    <input type="radio" id="teacher" name="usertype" value="teacher" >
+    <label for="teacher">Teacher</label><br>
+        
+    <input type="submit" value="Register!" />
+  </form>
 {% endblock %}
