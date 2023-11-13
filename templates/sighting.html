@@ -1,0 +1,72 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="sightings-list">
+    <h2>Reported Sightings</h2>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>No.</th>
+                <th>Species</th>
+                <th>Date of Sighting</th>
+                <th>Location</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if sightings %}
+            {% for sighting in sightings %}
+                <tr>
+                    <td>{{ sighting[0] }}</td>
+                    <td>{{ sighting[4] }}</td>                    
+                    <td>{{ sighting[5] }}</td>
+                    <td>{{ sighting[6] }}</td>                    
+                </tr>
+            {% endfor %}
+            {% else %}
+            <tr>
+                <td colspan="3">No sightings available.</td>
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
+</div>
+
+<style>
+    body {
+        background-color: #f2cea0;
+    }
+    
+    .sightings-list {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f4f4f4;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        text-align: center;
+    }
+
+    h2 {
+        color: rgb(3, 111, 44);
+        font-family: serif;
+        font-size: 24px;
+    }
+
+    table {
+        width: 100%;
+        margin-top: 10px;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        padding: 10px;
+        border: 1px solid #ccc;
+    }
+
+    th {
+        background-color: #007BFF;
+        color: #fff;
+    }
+</style>
+{% endblock %}
