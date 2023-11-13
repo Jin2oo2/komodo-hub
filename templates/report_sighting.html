@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="report-form">
+    <form action="" method="POST">
+        <h2>Report Endangered Species</h2>
+        <label for="species">Species:</label>
+        <input type="text" id="species" name="species" placeholder="Enter the species you spotted" required>
+        
+        <label for="location">Location:</label>
+        <input type="text" id="location" name="location" placeholder="Enter the location where you spotted the species" required>
+
+        <button type="submit">Submit Report</button>
+    </form>
+</div>
+
+<style>
+    body {
+        background-color: #f2cea0;
+    }
+    
+    .report-form {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f4f4f4;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        text-align: center;
+    }
+
+    h2 {
+        color: rgb(3, 111, 44);
+        font-family: serif;
+        font-size: 24px;
+    }
+
+    label {
+        display: block;
+        margin-top: 10px;
+    }
+
+    input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        margin: 5px 0;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+    }
+
+    button {
+        background-color: #007BFF;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+</style>
+{% endblock %}

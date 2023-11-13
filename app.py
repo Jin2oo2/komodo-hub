@@ -3,6 +3,7 @@ import sqlite3 as sql
 from models import create_feedback_table
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, LoginManager, login_user, login_required, current_user
+from models import *
 
 import os
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -88,6 +89,55 @@ def feedback():
         
         return redirect(url_for('feedback'))
     return render_template('feedback.html')  
+
+@app.route('/report_sighting' , methods = ['GET','POST'], endpoint='report_sighting')
+def report_sighting():
+    if request.method == 'GET':
+        return render_template('report_sighting.html')
+ 
+    if request.method == 'POST':
+        location = request.form['location']
+        species = request.form['species']
+        
+        conn = sql.connect('DBTest1.db')
+        cursor = conn.cursor()
+
+        cursor.execute("INSERT INTO sightings (date, location, species_name) VALUES (CURRENT_TIMESTAMP, ?, ?)", (location, species, ))
+
+        conn.commit()
+        conn.close()
+        
+        return redirect(url_for('sighting'))
+    return render_template('report_sighting.html')
+
+
+@app.route('/sighting' , methods = ['GET','POST'], endpoint='sighting')
+def sighting():
+
+    conn = sql.connect('DBTest1.db')
+    cursor = conn.cursor()
+
+    cursor.execute('SELECT * FROM SIGHTINGS')
+    sightings = cursor.fetchall()
+ 
+    conn.close()
+
+
+    return render_template('sighting.html', sightings = sightings)
+
+@app.route('/species' , methods = ['GET','POST'], endpoint='species')
+def species():
+
+    conn = sql.connect('DBTest1.db')
+    cursor = conn.cursor()
+
+    cursor.execute('SELECT * FROM SPECIES')
+    species = cursor.fetchall()
+ 
+    conn.close()
+
+
+    return render_template('species.html', species = species)
 
 @app.route('/change_password', methods=['GET', 'POST'])
 @login_required
