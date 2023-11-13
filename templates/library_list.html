@@ -1,0 +1,69 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="library-container">
+    <h2>Library Contents</h2>
+
+    <table class="library-table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Description</th>
+                <!-- Add more columns as needed -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in library_contents %}
+                <tr>
+                    <td>{{ item.title }}</td>
+                    <td>{{ item.author }}</td>
+                    <td>{{ item.description }}</td>
+                    <!-- Add more cells based on your item model -->
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+<style>
+    body {
+        background-color: #f2cea0;
+    }
+    
+    .library-table {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f4f4f4;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        text-align: center;
+    }
+
+    h2 {
+        color: rgb(3, 111, 44);
+        font-family: serif;
+        font-size: 24px;
+    }
+
+    table {
+        width: 100%;
+        margin-top: 10px;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        padding: 10px;
+        border: 1px solid #ccc;
+    }
+
+    th {
+        background-color: #007BFF;
+        color: #fff;
+    }
+</style>
+
+{% endblock %}
