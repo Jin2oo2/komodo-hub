@@ -4,7 +4,8 @@ from models import create_feedback_table
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, LoginManager, login_user, login_required, current_user
 from models import *
-
+from flask_wtf import FlaskForm
+from wtforms import FileField, SubmitField
 import os
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -16,11 +17,16 @@ db = SQLAlchemy()
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///komodoDB.db'
+app.config['UPLOAD_FOLDER'] = 'uploads'
 app.secret_key = os.urandom(24)
 db.init_app(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
+
+class UploadForm(FlaskForm):
+    file = FileField('Choose a file')
+    submit = SubmitField('Upload')
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -160,7 +166,26 @@ def change_password():
         else:
             flash('Current password is incorrect', 'error')
 
-    return render_template('password_reset.html')            
+    return render_template('password_reset.html')
+
+@app.route('/library_submit', methods=['GET', 'POST'])
+def submit():
+    form = UploadForm()
+    title = request.form['title']
+    description = request.form['description']
+
+    if request.method == 'POST' and form.validate_on_submit():
+        file = form.file.data
+        filename = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+        file.save(filename)
+        # Additional logic for processing the uploaded file, if needed
+        return 'File uploaded successfully!'
+
+    return render_template('library_add.html', form=form, title=title, description=description)
+
+@app.route('/library_list')
+def librarylist():
+    return render_template('library_list.html')    
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
