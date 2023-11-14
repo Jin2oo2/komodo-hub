@@ -199,6 +199,13 @@ def submit():
 def librarylist():
     return render_template('library_list.html')    
 
+@app.route('/business_dashboard')
+def businessDashboard():
+    return render_template('business_dashboard.html', users=getUsers())
+
+def getUsers():
+    return User.query.all()
+
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String, unique=True, nullable=False)
