@@ -3,7 +3,7 @@ from flask_bootstrap import Bootstrap
 import sqlite3 as sql
 from models import create_feedback_table
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import UserMixin, LoginManager, login_user, login_required, current_user
+from flask_login import UserMixin, LoginManager, login_user, login_required, current_user, logout_user
 from models import *
 from flask_wtf import FlaskForm
 from wtforms import FileField, SubmitField
@@ -64,22 +64,26 @@ def login():
     else:
         username = request.form['username']
         password = request.form['password']
-        print('username: ' + str(username) + ', password: ' + str(password))
-
         user = User.query.filter_by(username=username).first()
-        print(user)
 
         if not user:
             return '<h1>Wrong username</h1>'
         
         elif check_password_hash(user.password, password):
             login_user(user)
-            return '<h1>Logged in</h1>'
+            return redirect(url_for('hello'))
         
         else:
             return '<h1>Wrong password</h1>'
+        
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('hello'))
     
 @app.route('/feedback' , methods = ['GET','POST'], endpoint='feedback')
+@login_required
 def feedback():
     if request.method == 'GET':
         return render_template('feedback.html')
@@ -100,6 +104,7 @@ def feedback():
     return render_template('feedback.html')  
 
 @app.route('/report_sighting' , methods = ['GET','POST'], endpoint='report_sighting')
+@login_required
 def report_sighting():
     if request.method == 'GET':
         return render_template('report_sighting.html')
@@ -121,6 +126,7 @@ def report_sighting():
 
 
 @app.route('/sighting' , methods = ['GET','POST'], endpoint='sighting')
+@login_required
 def sighting():
 
     conn = sql.connect('DBTest1.db')
@@ -135,6 +141,7 @@ def sighting():
     return render_template('sighting.html', sightings = sightings)
 
 @app.route('/species' , methods = ['GET','POST'], endpoint='species')
+@login_required
 def species():
 
     conn = sql.connect('DBTest1.db')
@@ -172,6 +179,7 @@ def change_password():
     return render_template('password_reset.html')
 
 @app.route('/library_submit', methods=['GET', 'POST'])
+@login_required
 def submit():
     form = UploadForm()
     title = request.form['title']
@@ -187,6 +195,7 @@ def submit():
     return render_template('library_add.html', form=form, title=title, description=description)
 
 @app.route('/library_list')
+@login_required
 def librarylist():
     return render_template('library_list.html')    
 
