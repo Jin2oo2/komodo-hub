@@ -106,5 +106,7 @@ footer {
     text-align: right;
   }
 
-
+  .content-container {
+    margin-bottom: 60px; /* Adjust this margin to leave space for the footer */
+ }
 

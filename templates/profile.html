@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+
+{% block title %}User Profile{% endblock %}
+
+{% block content %}
+    <header>
+        <h1>User Profile</h1>
+    </header>
+    <section class="user-profile">
+        <div class="user-details">
+            <img id="profile-picture" src="profile-picture.jpg" alt="User's Profile Picture">
+            <h1 id="user-name">{{ user.username }}'s Profile</h1>
+            <p>User Type: {{ user.user_type }}</p>
+        </div>
+        <div class="profile-actions">
+            <button id="edit-profile-button">Edit Profile</button>
+        </div>
+    </section>
+    <section class="profile-details">
+        <h2>About Me</h2>
+        <p>User's introduction or description can go here. They can provide more information about their role in the initiative and how they expect it to affect their job.</p>
+    </section>
+    <section class="profile-features">
+        <h2>Profile Features</h2>
+        <ul>
+            <li>Manage subscriptions</li>
+            <li>Register schools and communities</li>
+            <li>Generate business dashboard</li>
+            <li>Retrieve data about subscriptions, user behavior, etc.</li>
+        </ul>
+    </section>
+
+    <section id="edit-profile-form" style="display: none;">
+        <h2>Edit Profile</h2>
+        <form id="profile-form">
+            <label for="new-username">New Username:</label>
+            <input type="text" id="new-username" name="new-username" required>
+            
+            <label for="new-profile-picture">New Profile Picture (URL):</label>
+            <input type="url" id="new-profile-picture" name="new-profile-picture" required>
+            
+            <input type="submit" value="Save Changes">
+        </form>
+    </section>
+
+    <script src="profile.js"></script>
+    
+    <script>
+        const editProfileButton = document.getElementById("edit-profile-button");
+        const editProfileForm = document.getElementById("edit-profile-form");
+        const profileForm = document.getElementById("profile-form");
+        const newUsernameInput = document.getElementById("new-username");
+        const profilePicture = document.getElementById("profile-picture");
+        const userName = document.getElementById("user-name");
+    
+        // Add a click event listener to the "Edit Profile" button
+        editProfileButton.addEventListener("click", function(event) {
+            editProfileForm.style.display = "block";
+            // Hide the user details while editing
+            document.querySelector(".user-details").style.display = "none";
+        });
+    
+        // Handle form submission
+        profileForm.addEventListener("submit", function(event) {
+            // Prevent the form from submitting traditionally
+            event.preventDefault();
+    
+            // Get the new username value from the form
+            const newUsername = newUsernameInput.value;
+    
+            // Update the user's name
+            userName.textContent = newUsername;
+    
+            // Hide the form after submission
+            editProfileForm.style.display = "none";
+            // Show the user details
+            document.querySelector(".user-details").style.display = "block";
+        });
+    </script>
+   <style>
+    .user-profile {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: #fff;
+    margin: 20px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.user-details {
+    flex: 1;
+}
+
+.user-details img {
+    max-width: 100px;
+    border-radius: 50%;
+}
+
+.profile-actions {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.profile-actions a {
+    background-color: #0074b2;
+    color: #fff;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.profile-actions a:hover {
+    background-color: #005683;
+}
+
+.profile-details {
+    background-color: #fff;
+    margin: 20px;
+    padding: 20px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.profile-features {
+    background-color: #fff;
+    margin: 20px;
+    padding: 20px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+ul {
+    list-style: disc;
+    margin-left: 20px;
+}
+
+#edit-profile-form {
+        display: none;
+    }
+    </style>
+
+    
+    {% endblock %}

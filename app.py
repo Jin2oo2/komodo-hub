@@ -203,6 +203,29 @@ def librarylist():
 def businessDashboard():
     return render_template('business_dashboard.html', users=getUsers())
 
+
+@app.route('/profile', methods=['GET', 'POST'])
+@login_required
+def profile():
+
+    if request.method == 'POST':
+        new_username = request.form.get('new_username')
+
+        # Assuming you have a User model with a 'username' attribute
+        current_user.username = new_username
+        db.session.commit()
+    # Access information about the current user
+    user_data = {
+        'username': current_user.username,
+        'user_type': current_user.userType  # Assuming 'userType' is a field in your User model
+    }
+    
+    return render_template('profile.html', user=user_data)
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
 def getUsers():
     return User.query.all()
 
