@@ -8,8 +8,15 @@ from wtforms import FileField, SubmitField
 import os
 from werkzeug.security import generate_password_hash, check_password_hash
 import random
+import logging
+from logging.handlers import RotatingFileHandler
 
-db_path = '/instance/DBTest1.db'
+# Configure logging
+handler = RotatingFileHandler('app.log', maxBytes=10000, backupCount=1)
+handler.setLevel(logging.INFO)
+
+
+db_path = 'instance//DBTest1.db'
 
 db = SQLAlchemy()
 
@@ -17,11 +24,11 @@ app = Flask(__name__)
 
 bootstarp = Bootstrap(app)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(app.root_path, 'instance', 'DBTest1.db')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///DBTest1.db'
 app.config['UPLOAD_FOLDER'] = 'uploads'
 app.secret_key = os.urandom(24)
 db.init_app(app)
-
+app.logger.addHandler(handler)
 login_manager = LoginManager()
 login_manager.init_app(app)
 
@@ -110,7 +117,7 @@ def feedback():
         suggestion = request.form['suggestion']
         
         
-        conn = sql.connect('instance\\DBTest1.db')
+        conn = sql.connect(db_path)
         cursor = conn.cursor()
 
         cursor.execute("INSERT INTO feedback (submission_date, suggestion) VALUES (CURRENT_TIMESTAMP, ?)", (suggestion,))
@@ -131,7 +138,7 @@ def report_sighting():
         location = request.form['location']
         species = request.form['species']
         
-        conn = sql.connect('DBTest1.db')
+        conn = sql.connect(db_path)
         cursor = conn.cursor()
 
         cursor.execute("INSERT INTO sightings (date, location, species_name) VALUES (CURRENT_TIMESTAMP, ?, ?)", (location, species, ))
@@ -147,7 +154,7 @@ def report_sighting():
 @login_required
 def sighting():
 
-    conn = sql.connect('DBTest1.db')
+    conn = sql.connect(db_path)
     cursor = conn.cursor()
 
     cursor.execute('SELECT * FROM SIGHTINGS')
@@ -162,7 +169,7 @@ def sighting():
 @login_required
 def species():
 
-    conn = sql.connect('DBTest1.db')
+    conn = sql.connect(db_path)
     cursor = conn.cursor()
 
     cursor.execute('SELECT * FROM SPECIES')
@@ -232,7 +239,7 @@ def register_school():
 
         try:
             # Establish a connection
-            connection = sql.connect('\\instance\\DBTest1.db')
+            connection = sql.connect(db_path)
             cursor = connection.cursor()
 
             # Check if the username is already taken
@@ -285,10 +292,11 @@ def register_teacher():
         first_name = request.form.get('first_name')
         last_name = request.form.get('last_name')
         school_id = request.form.get('school_id')  # Assuming you have a way to select a school during teacher registration
+        Class_id = request.form.get('class_id')
 
         try:
             # Establish a connection
-            connection = sql.connect('/instance/DBTest1.db')
+            connection = sql.connect(db_path)
             cursor = connection.cursor()
 
             # Check if the username is already taken
@@ -346,7 +354,7 @@ def register_student():
 
         try:
             # Establish a connection
-            connection = sql.connect('\\instance\\DBTest1.db')
+            connection = sql.connect(db_path)
             cursor = connection.cursor()
 
             # Check if the username is already taken
@@ -451,7 +459,7 @@ def get_student_data(user_id):
         SELECT * FROM Student
         WHERE User_ID = ?
     """
-    conn = sql.connect('DBTest1.db')
+    conn = sql.connect(db_path)
     cursor = conn.cursor()
     student_data = cursor.execute(query, (user_id,)).fetchall()
     conn.close()
@@ -463,11 +471,11 @@ def get_student_data(user_id):
 @login_required
 def student_dashboard():
     # Check if the current user is a student
-    if current_user.Type != 'STUDENT':
+    if current_user.Type != 'TEACHER':
         abort(403)  # Forbidden, redirect to an error page or display a message
 
     # Fetch data based on the student's user ID
-    student_data = get_student_data(current_user.id)  # You need to implement this function
+    student_data = get_student_data(current_user.User_ID)  # You need to implement this function
 
     return render_template('student_dashboard.html', student_data=student_data)
 
