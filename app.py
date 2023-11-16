@@ -9,7 +9,7 @@ import os
 from werkzeug.security import generate_password_hash, check_password_hash
 import random
 
-db_path = '\\instance\\DBTest1.db'
+db_path = '/instance/DBTest1.db'
 
 db = SQLAlchemy()
 
@@ -17,7 +17,7 @@ app = Flask(__name__)
 
 bootstarp = Bootstrap(app)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///DBTest1.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(app.root_path, 'instance', 'DBTest1.db')
 app.config['UPLOAD_FOLDER'] = 'uploads'
 app.secret_key = os.urandom(24)
 db.init_app(app)
@@ -46,7 +46,7 @@ def register():
         password = request.form.get('password')
 
         try:
-            connection = sql.connect('DBTest1.db')
+            connection = sql.connect('/instance/DBTest1.db')
             cursor = connection.cursor()
 
             # Check if the username is already taken
@@ -232,7 +232,7 @@ def register_school():
 
         try:
             # Establish a connection
-            connection = sql.connect('instance\\DBTest1.db')
+            connection = sql.connect('\\instance\\DBTest1.db')
             cursor = connection.cursor()
 
             # Check if the username is already taken
@@ -288,7 +288,7 @@ def register_teacher():
 
         try:
             # Establish a connection
-            connection = sql.connect('instance\\DBTest1.db')
+            connection = sql.connect('/instance/DBTest1.db')
             cursor = connection.cursor()
 
             # Check if the username is already taken
@@ -346,7 +346,7 @@ def register_student():
 
         try:
             # Establish a connection
-            connection = sql.connect('instance\\DBTest1.db')
+            connection = sql.connect('\\instance\\DBTest1.db')
             cursor = connection.cursor()
 
             # Check if the username is already taken
@@ -444,6 +444,33 @@ def quiz():
 
     # If the request method is GET, show the quiz form
     return render_template('quiz.html', questions=quiz_data.keys())
+
+def get_student_data(user_id):
+    # You need to modify this query based on your database schema
+    query = """
+        SELECT * FROM Student
+        WHERE User_ID = ?
+    """
+    conn = sql.connect('DBTest1.db')
+    cursor = conn.cursor()
+    student_data = cursor.execute(query, (user_id,)).fetchall()
+    conn.close()
+
+    return student_data
+
+
+@app.route('/student_dashboard')
+@login_required
+def student_dashboard():
+    # Check if the current user is a student
+    if current_user.Type != 'STUDENT':
+        abort(403)  # Forbidden, redirect to an error page or display a message
+
+    # Fetch data based on the student's user ID
+    student_data = get_student_data(current_user.id)  # You need to implement this function
+
+    return render_template('student_dashboard.html', student_data=student_data)
+
 
 @login_manager.user_loader
 def load_user(user_id):

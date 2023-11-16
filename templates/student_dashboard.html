@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <h1>Student Dashboard</h1>
+    
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Student ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <!-- Add more columns as needed -->
+            </tr>
+        </thead>
+        <tbody>
+            {% if student_data %}
+                {% for student in student_data %}
+                    <tr>
+                        <td>{{ student.User_ID }}</td>
+                        <td>{{ student.First_Name }}</td>
+                        <td>{{ student.Last_Name }}</td>
+                        <!-- Display more columns as needed -->
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="3">No data found for this student.</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+
+    {% endblock %}
