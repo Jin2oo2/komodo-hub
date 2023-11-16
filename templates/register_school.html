@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+
+<h2>School Registration</h2>
+<form method="post" action="{{ url_for('register_school') }}">
+    <label for="username">Username:</label>
+    <input type="text" name="username" required><br>
+    <label for="password">Password:</label>
+    <input type="password" name="password" required><br>
+    <label for="school_name">School Name:</label>
+    <input type="text" name="school_name" required><br>
+    <label for="supervisor_name">Supervisor Name:</label>
+    <input type="text" name="supervisor_name" required><br>
+    <label for="supervisor_phone">Supervisor Phone:</label>
+    <input type="tel" name="supervisor_phone" pattern="[0-9]{10}" placeholder="Enter a 10-digit phone number" required><br>
+    <label for="access_code">Access Code:</label>
+    <input type="text" name="access_code" required><br>
+    <input type="submit" value="Register">
+</form>
+
+{% endblock %}

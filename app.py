@@ -1,18 +1,15 @@
-from flask import Flask, request, render_template, url_for, redirect, abort, flash
+from flask import Flask, request, render_template, url_for, redirect, abort, flash, session
 from flask_bootstrap import Bootstrap
 import sqlite3 as sql
-from models import create_feedback_table
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, LoginManager, login_user, login_required, current_user, logout_user
-from models import *
 from flask_wtf import FlaskForm
 from wtforms import FileField, SubmitField
 import os
 from werkzeug.security import generate_password_hash, check_password_hash
 import random
 
-db_path = 'DBTest1.db'
-create_feedback_table()
+db_path = '\\instance\\DBTest1.db'
 
 db = SQLAlchemy()
 
@@ -20,7 +17,7 @@ app = Flask(__name__)
 
 bootstarp = Bootstrap(app)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///komodoDB.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///DBTest1.db'
 app.config['UPLOAD_FOLDER'] = 'uploads'
 app.secret_key = os.urandom(24)
 db.init_app(app)
@@ -42,40 +39,60 @@ def hello():
     loginURL = url_for('login')
     return render_template('home.html', registerURL=registerURL, loginURL=loginURL)
 
-@app.route('/register', methods=['GET', 'POST'])
+@app.route("/register", methods=['GET', 'POST'])
 def register():
-    if request.method == 'GET':
-        return render_template('register.html')
-    else:
-        username = request.form['username']
-        password = request.form['password']
-        userType = request.form['usertype']
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
 
-        user = User(username=username, password=generate_password_hash(password, method='scrypt:32768:8:1'), userType=userType)
+        try:
+            connection = sql.connect('DBTest1.db')
+            cursor = connection.cursor()
 
-        db.session.add(user)
-        db.session.commit()
+            # Check if the username is already taken
+            existing_user_query = "SELECT * FROM User WHERE username = ?"
+            existing_user = cursor.execute(existing_user_query, (username,)).fetchone()
 
-        return redirect(url_for('login'))
+            if existing_user:
+                flash('Username is already taken. Choose a different one.', 'danger')
+                return redirect(url_for('register'))
 
-@app.route('/login', methods=['GET', 'POST'])
+            # Insert new user
+            insert_user_query = "INSERT INTO User (username, password, Type) VALUES (?, ?, ?)"
+            cursor.execute(insert_user_query, (username, generate_password_hash(password, method='sha256'), None))
+
+            # Commit changes
+            connection.commit()
+
+            flash('Registration successful! You can now log in.', 'success')
+            return redirect(url_for('login'))
+
+        except sqlite3.Error as e:
+            print(f"SQLite error: {e}")
+            flash('Error with database operation. Please try again.', 'danger')
+
+        finally:
+            if connection:
+                connection.close()
+
+    return render_template('register.html')
+
+@app.route("/login", methods=['GET', 'POST'])
 def login():
-    if request.method == 'GET':
-        return render_template('login.html')
-    else:
-        username = request.form['username']
-        password = request.form['password']
-        user = User.query.filter_by(username=username).first()
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
 
-        if not user:
-            return '<h1>Wrong username</h1>'
-        
-        elif check_password_hash(user.password, password):
+        user = User.query.filter_by(username=username).first()
+        if user and check_password_hash(user.password, password):
+            flash('Login successful!', 'success')
             login_user(user)
-            return redirect(url_for('hello'))
-        
+            user_id = user.User_ID
+            return redirect(url_for('profile'))
         else:
-            return '<h1>Wrong password</h1>'
+            flash('Invalid username or password. Please try again.', 'danger')
+
+    return render_template('login.html')
         
 @app.route("/logout")
 @login_required
@@ -93,7 +110,7 @@ def feedback():
         suggestion = request.form['suggestion']
         
         
-        conn = sql.connect('DBTest1.db')
+        conn = sql.connect('instance\\DBTest1.db')
         cursor = conn.cursor()
 
         cursor.execute("INSERT INTO feedback (submission_date, suggestion) VALUES (CURRENT_TIMESTAMP, ?)", (suggestion,))
@@ -200,6 +217,176 @@ def submit():
 def librarylist():
     return render_template('library_list.html')    
 
+@app.route("/register/school", methods=['GET', 'POST'])
+def register_school():
+    if current_user.is_authenticated:
+        return redirect(url_for('dashboard'))
+
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        school_name = request.form.get('school_name')
+        supervisor_name = request.form.get('supervisor_name')
+        supervisor_phone = request.form.get('supervisor_phone')
+        access_code = request.form.get('access_code')
+
+        try:
+            # Establish a connection
+            connection = sql.connect('instance\\DBTest1.db')
+            cursor = connection.cursor()
+
+            # Check if the username is already taken
+            existing_user_query = "SELECT * FROM User WHERE username = ?"
+            existing_user = cursor.execute(existing_user_query, (username,)).fetchone()
+
+            if existing_user:
+                flash('Username is already taken. Choose a different one.', 'danger')
+                return redirect(url_for('register_school'))
+
+            # Insert new user
+            insert_user_query = "INSERT INTO User (username, password, Type) VALUES (?, ?, ?)"
+            cursor.execute(insert_user_query, (username, generate_password_hash(password, method='sha256'), 'SCHOOL'))
+
+            # Get the User_ID of the newly inserted user
+            get_user_id_query = "SELECT User_ID FROM User WHERE username = ?"
+            user_id = cursor.execute(get_user_id_query, (username,)).fetchone()
+
+            if user_id:
+                # Insert new school with the same User_ID
+                insert_school_query = "INSERT INTO School (User_ID, School_Name, Supervisor_Name, Supervisor_Phone, Access_Code) VALUES (?, ?, ?, ?, ?)"
+                cursor.execute(insert_school_query, (user_id[0], school_name, supervisor_name, supervisor_phone, access_code))
+
+                # Commit changes
+                connection.commit()
+
+                flash('Registration successful! You can now log in.', 'success')
+                return redirect(url_for('login'))
+            else:
+                flash('Error creating school. Please try again.', 'danger')
+                return redirect(url_for('register_school'))
+
+        except sql.Error as e:
+            print(f"SQLite error: {e}")
+            flash('Error with database operation. Please try again.', 'danger')
+            return redirect(url_for('register_school'))
+
+
+    return render_template('register_school.html')
+
+
+@app.route("/register/teacher", methods=['GET', 'POST'])
+def register_teacher():
+    if current_user.is_authenticated:
+        return redirect(url_for('dashboard'))
+
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        first_name = request.form.get('first_name')
+        last_name = request.form.get('last_name')
+        school_id = request.form.get('school_id')  # Assuming you have a way to select a school during teacher registration
+
+        try:
+            # Establish a connection
+            connection = sql.connect('instance\\DBTest1.db')
+            cursor = connection.cursor()
+
+            # Check if the username is already taken
+            existing_user_query = "SELECT * FROM User WHERE username = ?"
+            existing_user = cursor.execute(existing_user_query, (username,)).fetchone()
+
+            if existing_user:
+                flash('Username is already taken. Choose a different one.', 'danger')
+                return redirect(url_for('register_teacher'))
+
+            # Insert new user
+            insert_user_query = "INSERT INTO User (username, password, Type) VALUES (?, ?, ?)"
+            cursor.execute(insert_user_query, (username, generate_password_hash(password, method='sha256'), 'TEACHER'))
+
+            # Get the User_ID of the newly inserted user
+            get_user_id_query = "SELECT User_ID FROM User WHERE username = ?"
+            user_id = cursor.execute(get_user_id_query, (username,)).fetchone()
+
+            if user_id:
+                # Insert new teacher with the same User_ID
+                insert_teacher_query = "INSERT INTO Teacher (User_ID, First_Name, Last_Name, School_ID) VALUES (?, ?, ?, ?)"
+                cursor.execute(insert_teacher_query, (user_id[0], first_name, last_name, school_id))
+
+                # Commit changes
+                connection.commit()
+
+                flash('Registration successful! You can now log in.', 'success')
+                return redirect(url_for('login'))
+            else:
+                flash('Error creating teacher. Please try again.', 'danger')
+                return redirect(url_for('register_teacher'))
+
+        except sql.Error as e:
+            print(f"SQLite error: {e}")
+            flash('Error with database operation. Please try again.', 'danger')
+            return redirect(url_for('register_teacher'))
+
+    return render_template('register_teacher.html')
+
+
+
+
+@app.route("/register/student", methods=['GET', 'POST'])
+def register_student():
+    if current_user.is_authenticated:
+        return redirect(url_for('hello'))
+
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        first_name = request.form.get('first_name')
+        last_name = request.form.get('last_name')
+        school_id = request.form.get('school_id')  
+        class_id = request.form.get('class_id')  
+
+        try:
+            # Establish a connection
+            connection = sql.connect('instance\\DBTest1.db')
+            cursor = connection.cursor()
+
+            # Check if the username is already taken
+            existing_user_query = "SELECT * FROM User WHERE username = ?"
+            existing_user = cursor.execute(existing_user_query, (username,)).fetchone()
+
+            if existing_user:
+                flash('Username is already taken. Choose a different one.', 'danger')
+                return redirect(url_for('register_student'))
+
+            # Insert new user
+            insert_user_query = "INSERT INTO User (username, password, Type) VALUES (?, ?, ?)"
+            cursor.execute(insert_user_query, (username, generate_password_hash(password, method='sha256'), 'STUDENT'))
+
+            # Get the User_ID of the newly inserted user
+            get_user_id_query = "SELECT User_ID FROM User WHERE username = ?"
+            user_id = cursor.execute(get_user_id_query, (username,)).fetchone()
+
+            if user_id:
+                # Insert new student with the same User_ID
+                insert_student_query = "INSERT INTO Student (User_ID, First_Name, Last_Name, School_ID, Class_ID) VALUES (?, ?, ?, ?, ?)"
+                cursor.execute(insert_student_query, (user_id[0], first_name, last_name, school_id, class_id))
+
+                # Commit changes
+                connection.commit()
+
+                flash('Registration successful! You can now log in.', 'success')
+                return redirect(url_for('login'))
+            else:
+                flash('Error creating student. Please try again.', 'danger')
+                return redirect(url_for('register_student'))
+
+        except sql.Error as e:
+            print(f"SQLite error: {e}")
+            flash('Error with database operation. Please try again.', 'danger')
+            return redirect(url_for('register_student'))
+
+    return render_template('register_student.html')
+
+
 @app.route('/business_dashboard')
 def businessDashboard():
     return render_template('business_dashboard.html', users=getUsers())
@@ -208,22 +395,19 @@ def businessDashboard():
 @app.route('/profile', methods=['GET', 'POST'])
 @login_required
 def profile():
-
     if request.method == 'POST':
         new_username = request.form.get('new_username')
+        if new_username:
+            current_user.username = new_username  # Update the username in the current_user object
+            db.session.commit()  # Commit the changes to the database
 
-        # Assuming you have a User model with a 'username' attribute
-        current_user.username = new_username
-        db.session.commit()
-    # Access information about the current user
     user_data = {
         'username': current_user.username,
-        'user_type': current_user.userType  # Assuming 'userType' is a field in your User model
+        'user_type': current_user.Type  # Assuming 'userType' is an attribute in your User model
     }
-    
+
     return render_template('profile.html', user=user_data)
-
-
+  
 quiz_data = {
     "What is the largest primate in Indonesia?": ["Sumatran Orangutan", "orangutan"],
     "Which species of turtle is critically endangered in Indonesia?": ["Leatherback Turtle", "leatherback"],
@@ -261,7 +445,6 @@ def quiz():
     # If the request method is GET, show the quiz form
     return render_template('quiz.html', questions=quiz_data.keys())
 
-
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
@@ -269,8 +452,11 @@ def load_user(user_id):
 def getUsers():
     return User.query.all()
 
-class User(UserMixin, db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String, unique=True, nullable=False)
-    password = db.Column(db.String, nullable=False)
-    userType = db.Column(db.String, nullable=False)
+class User(db.Model, UserMixin):
+    User_ID = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    username = db.Column(db.String(255), nullable=False)
+    Type = db.Column(db.String(50), nullable=False)
+    password = db.Column(db.String(60), nullable=False)
+
+    def get_id(self):
+        return str(self.User_ID)

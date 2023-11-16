@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+
+<h2>Teacher Registration</h2>
+<form method="post" action="{{ url_for('register_teacher') }}">
+    <label for="username">Username:</label>
+    <input type="text" name="username" required><br>
+    <label for="password">Password:</label>
+    <input type="password" name="password" required><br>
+    <label for="first_name">First Name:</label>
+    <input type="text" name="first_name" required><br>
+    <label for="last_name">Last Name:</label>
+    <input type="text" name="last_name"><br>
+    <label for="school_id">School ID:</label>
+    <input type="text" name="school_id" required><br> 
+    <input type="submit" value="Register">
+</form>
+
+{% endblock %}
