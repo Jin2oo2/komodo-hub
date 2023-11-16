@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container">
+        <h1>Endangered Indonesian Animals Quiz</h1>
+        <form action="/quiz" method="post">
+            {% for question in questions %}
+                <p>{{ question }}</p>
+                <input type="text" name="{{ question }}" required>
+            {% endfor %}
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+{% endblock %}

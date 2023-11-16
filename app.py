@@ -7,6 +7,7 @@ from flask_wtf import FlaskForm
 from wtforms import FileField, SubmitField
 import os
 from werkzeug.security import generate_password_hash, check_password_hash
+import random
 
 db_path = '\\instance\\DBTest1.db'
 
@@ -406,10 +407,43 @@ def profile():
     }
 
     return render_template('profile.html', user=user_data)
+  
+quiz_data = {
+    "What is the largest primate in Indonesia?": ["Sumatran Orangutan", "orangutan"],
+    "Which species of turtle is critically endangered in Indonesia?": ["Leatherback Turtle", "leatherback"],
+    "What is the national animal of Indonesia?": ["Javan Hawk-Eagle", "hawk-eagle"],
+    "Which big cat is found in Sumatra and is critically endangered?": ["Sumatran Tiger", "tiger"],
+    "What is the world's rarest rhinoceros, found in Indonesia?": ["Javan Rhino", "rhino"],
+}
 
+def ask_question(question, correct_answer):
+    user_answer = request.form.get(question)
+    
+    # Check if the form data is None
+    if user_answer is None:
+        return False
+    
+    # Convert to lowercase and compare
+    return user_answer.lower() == correct_answer
 
+@app.route('/quiz', methods=['GET', 'POST'])
+def quiz():
+    if request.method == 'POST':
+        score = 0
 
+        # Shuffle the questions
+        questions = list(quiz_data.keys())
+        random.shuffle(questions)
 
+        for question in questions:
+            correct_answer = quiz_data[question][0].lower()
+            if ask_question(question, correct_answer):
+                score += 1
+
+        return render_template('results.html', score=score, total=len(quiz_data))
+
+    # If the request method is GET, show the quiz form
+    return render_template('quiz.html', questions=quiz_data.keys())
 
 @login_manager.user_loader
 def load_user(user_id):
