@@ -4,26 +4,32 @@
  <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
-  <div class="content-container">
-  <div class="topnav">
-    <a href="/">HOME</a>
-    <div class="dropdown">
+  <div>
+    <div class="topnav">
+      <a href="/">HOME</a>
+      <div class="dropdown">
         <button class="dropbtn">MENU</button>
         <div class="dropdown-content">
-            <a href="/species">SPECIES LIST</a>
-            <a href="/report_sighting">REPORT SIGHTING</a>
-            <a href="/sighting">SIGHTING LIST</a>
+          <a href="/species">SPECIES LIST</a>
+          <a href="/report_sighting">REPORT SIGHTING</a>
+          <a href="/sighting">SIGHTING LIST</a>
         </div>
-    </div>
-    <div class="right-links">
-      {% if current_user.is_authenticated %}
-        <a href="/logout">LOGOUT</a>
-        <a href="/profile">PROFILE</a>
-      {% else %}
-        <a href="/register">REGISTER</a>
-        <a href="/login">LOGIN</a>
-      {% endif %}
-      
+      </div>
+      <div class="dropdown" style="float: right;">
+        <button class="dropbtn">REGISTER</button>
+        <div class="dropdown-content">
+          <a href="/register">REGISTER</a>
+          <a href="/register/student">REGISTER STUDENT</a>
+          <a href="/register/teacher">REGISTER TEACHER</a>
+        </div>
+      </div>
+      <div class="dropdown" style="float: right;">
+        <button class="dropbtn">LOGIN</button>
+        <div class="dropdown-content">
+          <a href="/login">LOGIN</a>
+          <a href="/logout">LOGOUT</a>
+        </div>
+      </div>
     </div>
   </div>
   
@@ -33,7 +39,7 @@
 
   <footer>
     <p>Any Suggestions? Provide us with feedback
-    <a href="/feedback">Here</a>
+    <a href="/feedback">Here</a></p>
   </footer> 
 
 </div>
