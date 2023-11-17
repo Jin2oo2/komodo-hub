@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, url_for, redirect, abort, flash, session
+from flask import Flask, request, render_template, url_for, redirect, abort, flash, session, send_file
 from flask_bootstrap import Bootstrap
 import sqlite3 as sql
 from flask_sqlalchemy import SQLAlchemy
@@ -7,6 +7,7 @@ from flask_wtf import FlaskForm
 from wtforms import FileField, SubmitField
 import os
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 import random
 import logging
 from logging.handlers import RotatingFileHandler
@@ -36,6 +37,14 @@ class UploadForm(FlaskForm):
     file = FileField('Choose a file')
     submit = SubmitField('Upload')
 
+class LibraryItem(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(255), nullable=False)
+    author = db.Column(db.String(255))
+    description = db.Column(db.Text)
+    file_path = db.Column(db.String(255))  # Assuming you store file paths as strings
+
+
 @login_manager.user_loader
 def load_user(user_id):
     return User(id=user_id)
@@ -53,7 +62,7 @@ def register():
         password = request.form.get('password')
 
         try:
-            connection = sql.connect('/instance/DBTest1.db')
+            connection = sql.connect(db_path)
             cursor = connection.cursor()
 
             # Check if the username is already taken
@@ -207,22 +216,37 @@ def change_password():
 @login_required
 def submit():
     form = UploadForm()
-    title = request.form['title']
-    description = request.form['description']
 
     if request.method == 'POST' and form.validate_on_submit():
+        title = request.form.get('title')
+        description = request.form.get('description')
         file = form.file.data
-        filename = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
-        file.save(filename)
-        # Additional logic for processing the uploaded file, if needed
-        return 'File uploaded successfully!'
 
-    return render_template('library_add.html', form=form, title=title, description=description)
+        try:
+            # Save the file to the UPLOAD_FOLDER
+            filename = secure_filename(file.filename)
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(file_path)
+
+            new_item = LibraryItem(title=title, description=description, file_path=file_path)
+
+            db.session.add(new_item)
+            db.session.commit()
+
+            flash('File uploaded successfully!', 'success')
+            return redirect(url_for('librarylist'))
+
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            flash('Error uploading file. Please try again.', 'danger')
+
+    return render_template('library_add.html', form=form)
 
 @app.route('/library_list')
 @login_required
 def librarylist():
-    return render_template('library_list.html')    
+    library_contents = get_library_contents()  # You need to implement this function
+    return render_template('library_list.html', library_contents=library_contents)   
 
 @app.route("/register/school", methods=['GET', 'POST'])
 def register_school():
@@ -467,6 +491,15 @@ def get_student_data(user_id):
     return student_data
 
 
+@app.route('/download_file/<path:file_path>')
+def download_file(file_path):
+    # Construct the full path to the file on your server
+    full_path = os.path.join(app.config['UPLOAD_FOLDER'], file_path)
+
+    # Use Flask's send_file to send the file to the user
+    return send_file(full_path, as_attachment=True)
+
+
 @app.route('/student_dashboard')
 @login_required
 def student_dashboard():
@@ -479,6 +512,11 @@ def student_dashboard():
 
     return render_template('student_dashboard.html', student_data=student_data)
 
+
+def get_library_contents():
+    # This function fetches all library items from the database
+    # You may want to add additional filters or ordering based on your requirements
+    return LibraryItem.query.all()
 
 @login_manager.user_loader
 def load_user(user_id):
