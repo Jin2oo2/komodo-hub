@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <header>
+        <h1 class="news-head">News Website</h1>
+        <p>Your source for the latest news</p>
+    </header>
+
+    <section>
+        <article>
+            <h2><a href="https://news.sky.com/story/bizarre-mammal-named-after-david-attenborough-and-believed-to-be-extinct-is-rediscovered-by-scientists-13004588" class="article-link">Bizarre mammal believed to be extinct is rediscovered by 'euphoric' scientists</a></h2>
+            <p class="article-summary">The long-lost creature has the spines of a hedgehog, the snout of an anteater, and the feet of a mole - and has been rediscovered in the mountains of Indonesia - sparking "euphoria" among researchers.</p>
+        </article>
+
+        <article>
+            <h2><a href="https://www.nbcnews.com/news/world/indonesia-new-capital-nusantara-orangutans-dolphins-rcna76042" class="article-link">Indonesia’s new capital raises fears for orangutans, dolphins and more</a></h2>
+            <p class="article-summary">Government officials describe Nusantara as a “forest city,” but experts worry its construction could threaten the diverse species in the area and bring them into conflict with humans.</p>
+        </article>
+
+        <!-- Add more articles as needed -->
+    </section>
+
+    <style>
+        .news-head {
+            font-family: 'Serif', sans-serif;
+            font-size: 36px;
+            color: rgb(3, 111, 44);
+        }
+
+        .article-link {
+            text-decoration: none;
+            color: #0074b2; /* Link color */
+        }
+
+        .article-link:hover {
+            text-decoration: underline;
+        }
+
+        .article-summary {
+            font-style: italic;
+            color: #555; /* Adjust to your preferred color */
+        }
+    </style>
+{% endblock %}
