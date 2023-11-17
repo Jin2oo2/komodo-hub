@@ -55,6 +55,11 @@ def hello():
     loginURL = url_for('login')
     return render_template('home.html', registerURL=registerURL, loginURL=loginURL)
 
+@app.route('/news')
+def news():
+    return render_template('news.html')
+
+
 @app.route("/register", methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
