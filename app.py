@@ -180,7 +180,6 @@ def sighting():
     return render_template('sighting.html', sightings = sightings)
 
 @app.route('/species' , methods = ['GET','POST'], endpoint='species')
-@login_required
 def species():
 
     conn = sql.connect(db_path)
@@ -267,11 +266,9 @@ def register_school():
         access_code = request.form.get('access_code')
 
         try:
-            # Establish a connection
             connection = sql.connect(db_path)
             cursor = connection.cursor()
 
-            # Check if the username is already taken
             existing_user_query = "SELECT * FROM User WHERE username = ?"
             existing_user = cursor.execute(existing_user_query, (username,)).fetchone()
 
@@ -279,20 +276,15 @@ def register_school():
                 flash('Username is already taken. Choose a different one.', 'danger')
                 return redirect(url_for('register_school'))
 
-            # Insert new user
             insert_user_query = "INSERT INTO User (username, password, Type) VALUES (?, ?, ?)"
             cursor.execute(insert_user_query, (username, generate_password_hash(password, method='sha256'), 'SCHOOL'))
 
-            # Get the User_ID of the newly inserted user
             get_user_id_query = "SELECT User_ID FROM User WHERE username = ?"
             user_id = cursor.execute(get_user_id_query, (username,)).fetchone()
 
             if user_id:
-                # Insert new school with the same User_ID
                 insert_school_query = "INSERT INTO School (User_ID, School_Name, Supervisor_Name, Supervisor_Phone, Access_Code) VALUES (?, ?, ?, ?, ?)"
                 cursor.execute(insert_school_query, (user_id[0], school_name, supervisor_name, supervisor_phone, access_code))
-
-                # Commit changes
                 connection.commit()
 
                 flash('Registration successful! You can now log in.', 'success')
@@ -305,7 +297,6 @@ def register_school():
             print(f"SQLite error: {e}")
             flash('Error with database operation. Please try again.', 'danger')
             return redirect(url_for('register_school'))
-
 
     return render_template('register_school.html')
 
@@ -320,15 +311,13 @@ def register_teacher():
         password = request.form.get('password')
         first_name = request.form.get('first_name')
         last_name = request.form.get('last_name')
-        school_id = request.form.get('school_id')  # Assuming you have a way to select a school during teacher registration
+        school_id = request.form.get('school_id')
         Class_id = request.form.get('class_id')
 
         try:
-            # Establish a connection
             connection = sql.connect(db_path)
             cursor = connection.cursor()
 
-            # Check if the username is already taken
             existing_user_query = "SELECT * FROM User WHERE username = ?"
             existing_user = cursor.execute(existing_user_query, (username,)).fetchone()
 
@@ -336,20 +325,15 @@ def register_teacher():
                 flash('Username is already taken. Choose a different one.', 'danger')
                 return redirect(url_for('register_teacher'))
 
-            # Insert new user
             insert_user_query = "INSERT INTO User (username, password, Type) VALUES (?, ?, ?)"
             cursor.execute(insert_user_query, (username, generate_password_hash(password, method='sha256'), 'TEACHER'))
 
-            # Get the User_ID of the newly inserted user
             get_user_id_query = "SELECT User_ID FROM User WHERE username = ?"
             user_id = cursor.execute(get_user_id_query, (username,)).fetchone()
 
             if user_id:
-                # Insert new teacher with the same User_ID
                 insert_teacher_query = "INSERT INTO Teacher (User_ID, First_Name, Last_Name, School_ID) VALUES (?, ?, ?, ?)"
-                cursor.execute(insert_teacher_query, (user_id[0], first_name, last_name, school_id))
-
-                # Commit changes
+                cursor.execute(insert_teacher_query, (user_id[0], first_name, last_name, school_id))                
                 connection.commit()
 
                 flash('Registration successful! You can now log in.', 'success')
@@ -382,11 +366,9 @@ def register_student():
         class_id = request.form.get('class_id')  
 
         try:
-            # Establish a connection
             connection = sql.connect(db_path)
             cursor = connection.cursor()
 
-            # Check if the username is already taken
             existing_user_query = "SELECT * FROM User WHERE username = ?"
             existing_user = cursor.execute(existing_user_query, (username,)).fetchone()
 
@@ -394,20 +376,15 @@ def register_student():
                 flash('Username is already taken. Choose a different one.', 'danger')
                 return redirect(url_for('register_student'))
 
-            # Insert new user
             insert_user_query = "INSERT INTO User (username, password, Type) VALUES (?, ?, ?)"
             cursor.execute(insert_user_query, (username, generate_password_hash(password, method='sha256'), 'STUDENT'))
 
-            # Get the User_ID of the newly inserted user
             get_user_id_query = "SELECT User_ID FROM User WHERE username = ?"
             user_id = cursor.execute(get_user_id_query, (username,)).fetchone()
 
             if user_id:
-                # Insert new student with the same User_ID
                 insert_student_query = "INSERT INTO Student (User_ID, First_Name, Last_Name, School_ID, Class_ID) VALUES (?, ?, ?, ?, ?)"
                 cursor.execute(insert_student_query, (user_id[0], first_name, last_name, school_id, class_id))
-
-                # Commit changes
                 connection.commit()
 
                 flash('Registration successful! You can now log in.', 'success')
@@ -496,6 +473,7 @@ def get_student_data(user_id):
     return student_data
 
 
+
 @app.route('/download_file/<path:file_path>')
 def download_file(file_path):
     # Construct the full path to the file on your server
@@ -516,6 +494,23 @@ def student_dashboard():
     student_data = get_student_data(current_user.User_ID)  # You need to implement this function
 
     return render_template('student_dashboard.html', student_data=student_data)
+
+@app.route('/school_dashboard')
+def school_dashboard():
+    # Check if the current user is a school
+    if current_user.Type != 'SCHOOL':
+        abort(403)  # Forbidden, redirect to an error page or display a message
+
+
+    conn = sql.connect(db_path)
+    cursor = conn.cursor()
+
+    cursor.execute('SELECT * FROM SCHOOL')
+    schools = cursor.fetchall()
+ 
+    conn.close()
+
+    return render_template('school_dashboard.html', users=schools)
 
 
 def get_library_contents():

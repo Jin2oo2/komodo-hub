@@ -3,7 +3,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
 
 # Define the path to your SQLite database file
-db_path = '\\DBTest1.db'
+db_path = 'instance\\DBTest1.db'
 
 def create_feedback_table():
     conn = sqlite3.connect(db_path)
