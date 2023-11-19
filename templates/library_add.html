@@ -7,19 +7,15 @@
     <form method="POST" enctype="multipart/form-data">
         {{ form.hidden_tag() }}
 
-        <!-- Title field -->
         <label for="title">Title:</label>
         <input type="text" id="title" name="title" placeholder="Enter title" required>
 
-        <!-- Description field -->
         <label for="description">Description:</label>
         <textarea id="description" name="description" placeholder="Enter description" required></textarea>
 
-        <!-- File upload field -->
         <label for="file">Choose a file:</label>
         {{ form.file }}
         
-        <!-- Submit button -->
         <button type="submit">{{ form.submit }}</button>
     </form>
 </div>

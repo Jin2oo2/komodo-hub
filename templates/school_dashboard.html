@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}School Dashboard{% endblock %}
+
+{% block content %}
+<h1>School Dashboard</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>School Name</th>
+            <th>Supervisor Name</th>
+            <th>Supervisor Phone</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+            <tr>
+                <td>{{ user[2] }}</td>
+                <td>{{ user[3] }}</td>
+                <td>{{ user[4] }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<style>
+    table {
+        width: 80%;
+        margin: 20px auto;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+</style>
+
+{% endblock %}
