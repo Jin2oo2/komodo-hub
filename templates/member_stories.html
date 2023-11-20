@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <header>
+        <h1 class="stories-head">Komodo Hub Stories</h1>
+        <p>Read about positive experiences with Komodo Hub</p>
+    </header>
+
+    <section>
+        <article>
+            <h2 class="story-title">Empowering Learning</h2>
+            <p class="story-content">
+                "Komodo Hub provided an excellent learning environment. I enhanced my skills and connected with inspiring mentors."
+            </p>
+        </article>
+
+        <article>
+            <h2 class="story-title">Innovative Community</h2>
+            <p class="story-content">
+                "Being part of Komodo Hub's community opened doors to innovative projects and collaborations."
+            </p>
+        </article>
+
+        <!-- Add more stories as needed -->
+    </section>
+
+    <style>
+        .stories-head {
+            font-family: 'Serif', sans-serif;
+            font-size: 36px;
+            color: rgb(3, 111, 44);
+        }
+
+        .story-title {
+            font-size: 24px;
+            color: #0074b2; /* Title color */
+        }
+
+        .story-content {
+            font-style: italic;
+            color: #555; /* Content text color */
+        }
+    </style>
+{% endblock %}

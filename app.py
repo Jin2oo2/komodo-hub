@@ -486,14 +486,28 @@ def download_file(file_path):
 @app.route('/student_dashboard')
 @login_required
 def student_dashboard():
-    # Check if the current user is a student
-    if current_user.Type != 'TEACHER':
-        abort(403)  # Forbidden, redirect to an error page or display a message
+    if current_user.is_authenticated and current_user.Type == 'TEACHER':
+        # Establish a connection to the SQLite database
+        conn = sql.connect(db_path)  # Replace 'DATABASE' with your app's database path
+        cursor = conn.cursor()
 
-    # Fetch data based on the student's user ID
-    student_data = get_student_data(current_user.User_ID)  # You need to implement this function
+        # Fetch the school ID associated with the current user from the School table
+        user_id = current_user.User_ID  # Assuming this attribute exists in your User model
+        class_query = "SELECT Class_ID FROM Teacher WHERE User_ID = ?"
+        cursor.execute(class_query, (user_id,))
+        class_id = cursor.fetchone()
 
-    return render_template('student_dashboard.html', student_data=student_data)
+        if class_id:
+            # If the school ID is retrieved, fetch teachers associated with that school ID
+            class_id = class_id[0]  # Extracting the ID from the result tuple
+            teachers_query = "SELECT * FROM Student WHERE Class_ID = ?"
+            cursor.execute(teachers_query, (class_id,))
+            students = cursor.fetchall()
+            
+            conn.close()
+            return render_template('student_dashboard.html', students=students)
+    else:
+        return render_template('error.html', message='Access denied')
 
 @app.route('/school_dashboard')
 def school_dashboard():
@@ -512,10 +526,47 @@ def school_dashboard():
 
     return render_template('school_dashboard.html', users=schools)
 
+@app.route('/facts')
+def species_fun_facts():
+    return render_template('fun_facts.html')
+
+
+@app.route('/komodo_stories')
+def komodo_stories():
+    return render_template('member_stories.html')
+
+@app.route('/faq')
+def faq():
+    return render_template('FAQ.html')
+
+@app.route('/teacher_dashboard')
+@login_required
+def school_teachers():
+    if current_user.is_authenticated and current_user.Type == 'SCHOOL':
+        # Establish a connection to the SQLite database
+        conn = sql.connect(db_path)  # Replace 'DATABASE' with your app's database path
+        cursor = conn.cursor()
+
+        # Fetch the school ID associated with the current user from the School table
+        user_id = current_user.User_ID  # Assuming this attribute exists in your User model
+        school_query = "SELECT School_ID FROM School WHERE User_ID = ?"
+        cursor.execute(school_query, (user_id,))
+        school_id = cursor.fetchone()
+
+        if school_id:
+            # If the school ID is retrieved, fetch teachers associated with that school ID
+            school_id = school_id[0]  # Extracting the ID from the result tuple
+            teachers_query = "SELECT * FROM Teacher WHERE School_ID = ?"
+            cursor.execute(teachers_query, (school_id,))
+            teachers = cursor.fetchall()
+            
+            conn.close()
+            return render_template('teacher_dashboard.html', teachers=teachers)
+    else:
+        return render_template('error.html', message='Access denied')
+
 
 def get_library_contents():
-    # This function fetches all library items from the database
-    # You may want to add additional filters or ordering based on your requirements
     return LibraryItem.query.all()
 
 @login_manager.user_loader

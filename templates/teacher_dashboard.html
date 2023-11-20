@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <header>
+        <h1 class="teachers-head">Teachers at Your School</h1>
+        <p>Discover teachers associated with your school</p>
+    </header>
+    <table style="border-collapse: collapse; width: 100%;">
+        <thead>
+            <tr style="background-color: lightgray;">
+                <th style="text-align: center; border: 1px solid black; padding: 8px;">Teacher User ID</th>
+                <th style="text-align: center; border: 1px solid black; padding: 8px;">Teacher Name</th>
+                <th style="text-align: center; border: 1px solid black; padding: 8px;">Teacher Last Name</th>
+                <th style="text-align: center; border: 1px solid black; padding: 8px;">Class ID</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for teacher in teachers %}
+                <tr>
+                    <td style="text-align: center; border: 1px solid black; padding: 8px;">{{ teacher[0] }}</td>
+                    <td style="text-align: center; border: 1px solid black; padding: 8px;">{{ teacher[2] }}</td>
+                    <td style="text-align: center; border: 1px solid black; padding: 8px;">{{ teacher[3] }}</td>
+                    <td style="text-align: center; border: 1px solid black; padding: 8px;">{{ teacher[4] }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <style>
+        .teachers-head {
+            font-family: 'Serif', sans-serif;
+            font-size: 36px;
+            color: rgb(3, 111, 44);
+        }
+
+        /* Add more styling as needed */
+    </style>
+{% endblock %}
