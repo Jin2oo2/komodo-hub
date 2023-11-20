@@ -1,119 +1,125 @@
-Exception on /library_list [GET]
+Exception on /teacher_dashboard [GET]
 Traceback (most recent call last):
-  File "C:\Users\udits\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 2190, in wsgi_app
+  File "C:\Users\owais\Desktop\Yggdrasill\KS\5001CEM\Project\Lib\site-packages\flask\app.py", line 1455, in wsgi_app
     response = self.full_dispatch_request()
                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\udits\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 1486, in full_dispatch_request
+  File "C:\Users\owais\Desktop\Yggdrasill\KS\5001CEM\Project\Lib\site-packages\flask\app.py", line 869, in full_dispatch_request
     rv = self.handle_user_exception(e)
          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\udits\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 1484, in full_dispatch_request
+  File "C:\Users\owais\Desktop\Yggdrasill\KS\5001CEM\Project\Lib\site-packages\flask\app.py", line 867, in full_dispatch_request
     rv = self.dispatch_request()
          ^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\udits\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 1469, in dispatch_request
+  File "C:\Users\owais\Desktop\Yggdrasill\KS\5001CEM\Project\Lib\site-packages\flask\app.py", line 852, in dispatch_request
     return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\udits\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask_login\utils.py", line 290, in decorated_view
+  File "C:\Users\owais\Desktop\Yggdrasill\KS\5001CEM\Project\Lib\site-packages\flask_login\utils.py", line 290, in decorated_view
     return current_app.ensure_sync(func)(*args, **kwargs)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\udits\Desktop\fork\komodo-hub\app.py", line 240, in librarylist
-    library_contents = get_library_contents()  # You need to implement this function
-                       ^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\udits\Desktop\fork\komodo-hub\app.py", line 511, in get_library_contents
-    return LibraryItem.query.all()
-           ^^^^^^^^^^^
-NameError: name 'LibraryItem' is not defined
-Exception on /library_list [GET]
+  File "C:\Users\owais\Desktop\Yggdrasill\KS\komodo-hub\app.py", line 528, in school_teachers
+    school_id = current_user.School_ID  # Assuming this attribute exists in your User model
+                ^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'User' object has no attribute 'School_ID'
+Exception on /teacher_dashboard [GET]
 Traceback (most recent call last):
-  File "C:\Users\udits\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 2190, in wsgi_app
+  File "C:\Users\owais\Desktop\Yggdrasill\KS\5001CEM\Project\Lib\site-packages\flask\app.py", line 1455, in wsgi_app
     response = self.full_dispatch_request()
                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\udits\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 1486, in full_dispatch_request
+  File "C:\Users\owais\Desktop\Yggdrasill\KS\5001CEM\Project\Lib\site-packages\flask\app.py", line 869, in full_dispatch_request
     rv = self.handle_user_exception(e)
          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\udits\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 1484, in full_dispatch_request
+  File "C:\Users\owais\Desktop\Yggdrasill\KS\5001CEM\Project\Lib\site-packages\flask\app.py", line 867, in full_dispatch_request
     rv = self.dispatch_request()
          ^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\udits\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 1469, in dispatch_request
+  File "C:\Users\owais\Desktop\Yggdrasill\KS\5001CEM\Project\Lib\site-packages\flask\app.py", line 852, in dispatch_request
     return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\udits\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask_login\utils.py", line 290, in decorated_view
+  File "C:\Users\owais\Desktop\Yggdrasill\KS\5001CEM\Project\Lib\site-packages\flask_login\utils.py", line 290, in decorated_view
     return current_app.ensure_sync(func)(*args, **kwargs)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\udits\Desktop\fork\komodo-hub\app.py", line 240, in librarylist
-    library_contents = get_library_contents()  # You need to implement this function
-                       ^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\udits\Desktop\fork\komodo-hub\app.py", line 511, in get_library_contents
-    return LibraryItem.query.all()
-           ^^^^^^^^^^^
-NameError: name 'LibraryItem' is not defined
-Exception on /library_list [GET]
+  File "C:\Users\owais\Desktop\Yggdrasill\KS\komodo-hub\app.py", line 529, in school_teachers
+    conn = sqlite3.connect(current_app.config['DATABASE'])  # Replace 'DATABASE' with your app's database path
+           ^^^^^^^
+NameError: name 'sqlite3' is not defined
+Exception on /teacher_dashboard [GET]
 Traceback (most recent call last):
-  File "C:\Users\udits\AppData\Local\Programs\Python\Python311\Lib\site-packages\sqlalchemy\engine\base.py", line 1969, in _exec_single_context
-    self.dialect.do_execute(
-  File "C:\Users\udits\AppData\Local\Programs\Python\Python311\Lib\site-packages\sqlalchemy\engine\default.py", line 922, in do_execute
-    cursor.execute(statement, parameters)
-sqlite3.OperationalError: no such table: library_item
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "C:\Users\udits\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 2190, in wsgi_app
+  File "C:\Users\owais\Desktop\Yggdrasill\KS\5001CEM\Project\Lib\site-packages\flask\app.py", line 1455, in wsgi_app
     response = self.full_dispatch_request()
                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\udits\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 1486, in full_dispatch_request
+  File "C:\Users\owais\Desktop\Yggdrasill\KS\5001CEM\Project\Lib\site-packages\flask\app.py", line 869, in full_dispatch_request
     rv = self.handle_user_exception(e)
          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\udits\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 1484, in full_dispatch_request
+  File "C:\Users\owais\Desktop\Yggdrasill\KS\5001CEM\Project\Lib\site-packages\flask\app.py", line 867, in full_dispatch_request
     rv = self.dispatch_request()
          ^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\udits\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 1469, in dispatch_request
+  File "C:\Users\owais\Desktop\Yggdrasill\KS\5001CEM\Project\Lib\site-packages\flask\app.py", line 852, in dispatch_request
     return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\udits\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask_login\utils.py", line 290, in decorated_view
+  File "C:\Users\owais\Desktop\Yggdrasill\KS\5001CEM\Project\Lib\site-packages\flask_login\utils.py", line 290, in decorated_view
     return current_app.ensure_sync(func)(*args, **kwargs)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\udits\Desktop\fork\komodo-hub\app.py", line 248, in librarylist
-    library_contents = get_library_contents()  # You need to implement this function
-                       ^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\udits\Desktop\fork\komodo-hub\app.py", line 519, in get_library_contents
-    return LibraryItem.query.all()
-           ^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\udits\AppData\Local\Programs\Python\Python311\Lib\site-packages\sqlalchemy\orm\query.py", line 2693, in all
-    return self._iter().all()  # type: ignore
-           ^^^^^^^^^^^^
-  File "C:\Users\udits\AppData\Local\Programs\Python\Python311\Lib\site-packages\sqlalchemy\orm\query.py", line 2847, in _iter
-    result: Union[ScalarResult[_T], Result[_T]] = self.session.execute(
-                                                  ^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\udits\AppData\Local\Programs\Python\Python311\Lib\site-packages\sqlalchemy\orm\session.py", line 2306, in execute
-    return self._execute_internal(
-           ^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\udits\AppData\Local\Programs\Python\Python311\Lib\site-packages\sqlalchemy\orm\session.py", line 2188, in _execute_internal
-    result: Result[Any] = compile_state_cls.orm_execute_statement(
-                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\udits\AppData\Local\Programs\Python\Python311\Lib\site-packages\sqlalchemy\orm\context.py", line 293, in orm_execute_statement
-    result = conn.execute(
-             ^^^^^^^^^^^^^
-  File "C:\Users\udits\AppData\Local\Programs\Python\Python311\Lib\site-packages\sqlalchemy\engine\base.py", line 1416, in execute
-    return meth(
-           ^^^^^
-  File "C:\Users\udits\AppData\Local\Programs\Python\Python311\Lib\site-packages\sqlalchemy\sql\elements.py", line 516, in _execute_on_connection
-    return connection._execute_clauseelement(
+  File "C:\Users\owais\Desktop\Yggdrasill\KS\komodo-hub\app.py", line 529, in school_teachers
+    conn = sql.connect(current_app.config['DATABASE'])  # Replace 'DATABASE' with your app's database path
+                       ^^^^^^^^^^^
+NameError: name 'current_app' is not defined
+Exception on /teacher_dashboard [GET]
+Traceback (most recent call last):
+  File "C:\Users\owais\Desktop\Yggdrasill\KS\5001CEM\Project\Lib\site-packages\flask\app.py", line 1455, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\owais\Desktop\Yggdrasill\KS\5001CEM\Project\Lib\site-packages\flask\app.py", line 869, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\owais\Desktop\Yggdrasill\KS\5001CEM\Project\Lib\site-packages\flask\app.py", line 867, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\owais\Desktop\Yggdrasill\KS\5001CEM\Project\Lib\site-packages\flask\app.py", line 852, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\owais\Desktop\Yggdrasill\KS\5001CEM\Project\Lib\site-packages\flask_login\utils.py", line 290, in decorated_view
+    return current_app.ensure_sync(func)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\owais\Desktop\Yggdrasill\KS\komodo-hub\app.py", line 546, in school_teachers
+    return render_template('school_teachers.html', teachers=teachers)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\owais\Desktop\Yggdrasill\KS\5001CEM\Project\Lib\site-packages\flask\templating.py", line 151, in render_template
+    template = app.jinja_env.get_or_select_template(template_name_or_list)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\owais\Desktop\Yggdrasill\KS\5001CEM\Project\Lib\site-packages\jinja2\environment.py", line 1081, in get_or_select_template
+    return self.get_template(template_name_or_list, parent, globals)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\owais\Desktop\Yggdrasill\KS\5001CEM\Project\Lib\site-packages\jinja2\environment.py", line 1010, in get_template
+    return self._load_template(name, globals)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\udits\AppData\Local\Programs\Python\Python311\Lib\site-packages\sqlalchemy\engine\base.py", line 1639, in _execute_clauseelement
-    ret = self._execute_context(
-          ^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\udits\AppData\Local\Programs\Python\Python311\Lib\site-packages\sqlalchemy\engine\base.py", line 1848, in _execute_context
-    return self._exec_single_context(
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\udits\AppData\Local\Programs\Python\Python311\Lib\site-packages\sqlalchemy\engine\base.py", line 1988, in _exec_single_context
-    self._handle_dbapi_exception(
-  File "C:\Users\udits\AppData\Local\Programs\Python\Python311\Lib\site-packages\sqlalchemy\engine\base.py", line 2343, in _handle_dbapi_exception
-    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
-  File "C:\Users\udits\AppData\Local\Programs\Python\Python311\Lib\site-packages\sqlalchemy\engine\base.py", line 1969, in _exec_single_context
-    self.dialect.do_execute(
-  File "C:\Users\udits\AppData\Local\Programs\Python\Python311\Lib\site-packages\sqlalchemy\engine\default.py", line 922, in do_execute
-    cursor.execute(statement, parameters)
-sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) no such table: library_item
-[SQL: SELECT library_item.id AS library_item_id, library_item.title AS library_item_title, library_item.author AS library_item_author, library_item.description AS library_item_description, library_item.file_path AS library_item_file_path 
-FROM library_item]
-(Background on this error at: https://sqlalche.me/e/20/e3q8)
+  File "C:\Users\owais\Desktop\Yggdrasill\KS\5001CEM\Project\Lib\site-packages\jinja2\environment.py", line 969, in _load_template
+    template = self.loader.load(self, name, self.make_globals(globals))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\owais\Desktop\Yggdrasill\KS\5001CEM\Project\Lib\site-packages\jinja2\loaders.py", line 126, in load
+    source, filename, uptodate = self.get_source(environment, name)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\owais\Desktop\Yggdrasill\KS\5001CEM\Project\Lib\site-packages\flask\templating.py", line 65, in get_source
+    return self._get_source_fast(environment, template)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\owais\Desktop\Yggdrasill\KS\5001CEM\Project\Lib\site-packages\flask\templating.py", line 99, in _get_source_fast
+    raise TemplateNotFound(template)
+jinja2.exceptions.TemplateNotFound: school_teachers.html
+Exception on /student_dashboard [GET]
+Traceback (most recent call last):
+  File "C:\Users\owais\Desktop\Yggdrasill\KS\5001CEM\Project\Lib\site-packages\flask\app.py", line 1455, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\owais\Desktop\Yggdrasill\KS\5001CEM\Project\Lib\site-packages\flask\app.py", line 869, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\owais\Desktop\Yggdrasill\KS\5001CEM\Project\Lib\site-packages\flask\app.py", line 867, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\owais\Desktop\Yggdrasill\KS\5001CEM\Project\Lib\site-packages\flask\app.py", line 852, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\owais\Desktop\Yggdrasill\KS\5001CEM\Project\Lib\site-packages\flask_login\utils.py", line 290, in decorated_view
+    return current_app.ensure_sync(func)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\owais\Desktop\Yggdrasill\KS\komodo-hub\app.py", line 504, in student_dashboard
+    cursor.execute(teachers_query, (school_id,))
+                                    ^^^^^^^^^
+NameError: name 'school_id' is not defined

@@ -7,27 +7,17 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Student ID</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <!-- Add more columns as needed -->
+                <th style="text-align: center; border: 1px solid black; padding: 8px;">Student ID</th>
+                <th style="text-align: center; border: 1px solid black; padding: 8px;">Student Name</th>
             </tr>
         </thead>
         <tbody>
-            {% if student_data %}
-                {% for student in student_data %}
-                    <tr>
-                        <td>{{ student.User_ID }}</td>
-                        <td>{{ student.First_Name }}</td>
-                        <td>{{ student.Last_Name }}</td>
-                        <!-- Display more columns as needed -->
-                    </tr>
-                {% endfor %}
-            {% else %}
+            {% for student in students %}
                 <tr>
-                    <td colspan="3">No data found for this student.</td>
+                    <td style="text-align: center; border: 1px solid black; padding: 8px;">{{ student[0] }}</td>
+                    <td style="text-align: center; border: 1px solid black; padding: 8px;">{{ student[2] }}</td>
                 </tr>
-            {% endif %}
+            {% endfor %}
         </tbody>
     </table>
 
