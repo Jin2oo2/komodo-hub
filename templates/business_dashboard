@@ -5,20 +5,7 @@
 {% block content %}
 <h1>Business Dashboard</h1>
 
-<table>
-    <tr>
-        <th>Total Users</th>
-        <th>Students</th>
-        <th>Teachers</th>
-        <th>Schools</th>
-    </tr>
-    <tr>
-        <td>{{ users|length }}</td>
-        <td>{{ users|selectattr('Type', 'equalto', 'STUDENT')|list|length }}</td>
-        <td>{{ users|selectattr('Type', 'equalto', 'TEACHER')|list|length }}</td>
-        <td>{{ users|selectattr('Type', 'equalto', 'SCHOOL')|list|length }}</td>
-    </tr>
-</table>
+<p>Total number of users: {{ users }}</p>
 
 <table>
     <thead>
