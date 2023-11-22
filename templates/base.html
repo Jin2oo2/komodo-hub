@@ -15,24 +15,23 @@
           <a href="/sighting">SIGHTING LIST</a>
         </div>
       </div>
-      <div class="dropdown" style="float: right;">
-        <button class="dropbtn">REGISTER</button>
-        <div class="dropdown-content">
-          <a href="/register">REGISTER</a>
-          <a href="/register/student">REGISTER STUDENT</a>
-          <a href="/register/teacher">REGISTER TEACHER</a>
+        <div style="float: right;">
+          {% if current_user.is_authenticated %}
+            <a href="/logout">LOGOUT</a>
+          {% else %}
+            <div class="dropdown" style="float: right;">
+              <button class="dropbtn">REGISTER</button>
+              <div class="dropdown-content">
+                <a href="/register">REGISTER</a>
+                <a href="/register/student">REGISTER STUDENT</a>
+                <a href="/register/teacher">REGISTER TEACHER</a>
+              </div>
+            </div>
+            <a href="/login">LOGIN</a>
+          {% endif %}
         </div>
-      </div>
-      <div class="dropdown" style="float: right;">
-        <button class="dropbtn">LOGIN</button>
-        <div class="dropdown-content">
-          <a href="/login">LOGIN</a>
-          <a href="/logout">LOGOUT</a>
-        </div>
-      </div>
     </div>
   </div>
-  
 
   {% block content %}
   {% endblock %}

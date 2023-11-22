@@ -105,6 +105,7 @@ def login():
         password = request.form.get('password')
 
         user = User.query.filter_by(username=username).first()
+
         if user and check_password_hash(user.password, password):
             flash('Login successful!', 'success')
             login_user(user)
@@ -112,6 +113,7 @@ def login():
             return redirect(url_for('profile'))
         else:
             flash('Invalid username or password. Please try again.', 'danger')
+            return '<h1>Invalid username or password...</h1>'
 
     return render_template('login.html')
         
